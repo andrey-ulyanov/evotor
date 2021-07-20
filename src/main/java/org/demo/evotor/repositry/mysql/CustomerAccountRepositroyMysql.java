@@ -3,10 +3,10 @@ package org.demo.evotor.repositry.mysql;
 import java.sql.Types;
 import java.util.List;
 
-import org.demo.evotor.config.AppConfig;
+import org.demo.evotor.config.EvotorConfig;
 import org.demo.evotor.domain.Customer;
 import org.demo.evotor.domain.CustomerAccount;
-import org.demo.evotor.repositry.AbstractMysqlRepository;
+import org.demo.evotor.repositry.AbstractJdbcRepository;
 import org.demo.evotor.repositry.CustomerAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,8 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-@ConditionalOnProperty(name = AppConfig.DATASOURCE_PLATFORM, havingValue = AppConfig.DATASOURCE_PLATFORM_MYSQL, matchIfMissing = false)
-public class CustomerAccountRepositroyMysql extends AbstractMysqlRepository<CustomerAccount, Integer>
+@ConditionalOnProperty(name = EvotorConfig.DATASOURCE_PLATFORM, havingValue = EvotorConfig.DATASOURCE_PLATFORM_MYSQL, matchIfMissing = false)
+public class CustomerAccountRepositroyMysql extends AbstractJdbcRepository<CustomerAccount, Long>
 		implements CustomerAccountRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerAccountRepositroyMysql.class);

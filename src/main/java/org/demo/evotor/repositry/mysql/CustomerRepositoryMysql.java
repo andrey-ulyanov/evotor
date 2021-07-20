@@ -2,9 +2,9 @@ package org.demo.evotor.repositry.mysql;
 
 import java.util.List;
 
-import org.demo.evotor.config.AppConfig;
+import org.demo.evotor.config.EvotorConfig;
 import org.demo.evotor.domain.Customer;
-import org.demo.evotor.repositry.AbstractMysqlRepository;
+import org.demo.evotor.repositry.AbstractJdbcRepository;
 import org.demo.evotor.repositry.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-@ConditionalOnProperty(name = AppConfig.DATASOURCE_PLATFORM, havingValue = AppConfig.DATASOURCE_PLATFORM_MYSQL, matchIfMissing = false)
-public class CustomerRepositoryMysql extends AbstractMysqlRepository<Customer, Integer> implements CustomerRepository {
+@ConditionalOnProperty(name = EvotorConfig.DATASOURCE_PLATFORM, havingValue = EvotorConfig.DATASOURCE_PLATFORM_MYSQL, matchIfMissing = false)
+public class CustomerRepositoryMysql extends AbstractJdbcRepository<Customer, Long> implements CustomerRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerRepositoryMysql.class);
 

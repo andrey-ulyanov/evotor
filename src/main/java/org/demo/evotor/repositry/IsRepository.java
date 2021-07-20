@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.demo.evotor.domain.IsDomain;
+
 /***
  * Marker for database repository.
  * 
@@ -12,7 +14,7 @@ import java.util.List;
  * @param <TYPE> Database entity type.
  * @param <PK>   Primary key type.
  */
-public interface IsRepository<TYPE, PK> {
+public interface IsRepository<TYPE extends IsDomain, PK> {
 
 	/**
 	 * Insert row.

@@ -10,12 +10,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = { "org.demo.evo" })
-public class AppConfig {
+@ComponentScan(basePackages = { "org.demo.evotor" })
+public class EvotorConfig {
 
 	/* Class */
 
-	private static final Logger LOG = LoggerFactory.getLogger(AppConfig.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EvotorConfig.class);
 
 	public static final String DATASOURCE_PLATFORM = "spring.datasource.platform";
 	public static final String DATASOURCE_PLATFORM_MYSQL = "mysql";
@@ -24,7 +24,7 @@ public class AppConfig {
 	/**
 	 * Default
 	 */
-	public AppConfig() {
+	public EvotorConfig() {
 		super();
 	}
 

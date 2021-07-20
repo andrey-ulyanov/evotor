@@ -2,11 +2,11 @@ package org.demo.evotor.repositry.h2;
 
 import java.util.List;
 
-import org.demo.evotor.config.AppConfig;
+import org.demo.evotor.config.EvotorConfig;
 import org.demo.evotor.domain.Currency;
 import org.demo.evotor.domain.Customer;
 import org.demo.evotor.domain.CustomerAccount;
-import org.demo.evotor.repositry.AbstractMysqlRepository;
+import org.demo.evotor.repositry.AbstractJdbcRepository;
 import org.demo.evotor.repositry.CustomerAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,8 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-@ConditionalOnProperty(name = AppConfig.DATASOURCE_PLATFORM, havingValue = AppConfig.DATASOURCE_PLATFORM_H2, matchIfMissing = false)
-public class CustomerAccountRepositroyH2 extends AbstractMysqlRepository<CustomerAccount, Integer>
+@ConditionalOnProperty(name = EvotorConfig.DATASOURCE_PLATFORM, havingValue = EvotorConfig.DATASOURCE_PLATFORM_H2, matchIfMissing = false)
+public class CustomerAccountRepositroyH2 extends AbstractJdbcRepository<CustomerAccount, Long>
 		implements CustomerAccountRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerAccountRepositroyH2.class);
@@ -37,7 +37,7 @@ public class CustomerAccountRepositroyH2 extends AbstractMysqlRepository<Custome
 			+ CustomerAccount.COLUMN_VERSION + ", " + CustomerAccount.COLUMN_TIMESTAMP + ", "
 			+ CustomerAccount.COLUMN_CURRENCY + ", " + CustomerAccount.COLUMN_BALANCE + ", "
 			+ CustomerAccount.COLUMN_ID_CUSTOMER + ") " + "values"
-			+ " ( :id, :version, :timestamp, :currency, :balance, :id_customer )";
+			+ " ( :id, :version, :timestamp, :currency, :balance, :idCustomer )";
 
 	public static final String SELECT = "select * from " + CustomerAccount.TABLE;
 
@@ -83,14 +83,14 @@ public class CustomerAccountRepositroyH2 extends AbstractMysqlRepository<Custome
 	protected String getSqlInsert() {
 		return INSERT;
 	}
-	
+
 	/* ***** Implementation ***** */
 
 	@Override
 	public List<CustomerAccount> selectBy(Customer customer) {
 		LOG.debug(">> selectBy(Customer customer = {})", customer);
-		
-		CustomerAccount filter = new CustomerAccount().setIdCustomer(customer.getId());		
+
+		CustomerAccount filter = new CustomerAccount().setIdCustomer(customer.getId());
 		List<CustomerAccount> result = super.selectBy(SELECT_BY_ID_CUSTOMER, filter);
 
 		LOG.debug("<< sselectBy(Customer customer = {}): {}", result);

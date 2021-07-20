@@ -1,8 +1,10 @@
 package org.demo.evotor.repositry;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.demo.evotor.domain.IsDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,9 +18,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
  * @param <TYPE>
  * @param <PK>
  */
-public abstract class AbstractMysqlRepository<TYPE, PK> implements IsRepository<TYPE, PK> {
+public abstract class AbstractJdbcRepository<TYPE extends IsDomain, PK> implements IsRepository<TYPE, PK> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractMysqlRepository.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractJdbcRepository.class);
 
 	/* Instance */
 
@@ -28,7 +30,7 @@ public abstract class AbstractMysqlRepository<TYPE, PK> implements IsRepository<
 	 * 
 	 * @param jdbcTemplate
 	 */
-	public AbstractMysqlRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+	public AbstractJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
 		super();
 		this.jdbcTemplate = jdbcTemplate;
 	}
@@ -86,6 +88,10 @@ public abstract class AbstractMysqlRepository<TYPE, PK> implements IsRepository<
 	public int insert(TYPE o) {
 		LOG.debug(">> insert(TYPE o = {})", o);
 
+		o.setId(o.generateID());
+		o.setVersion(1);
+		o.setTimestamp(Calendar.getInstance().getTime());
+		
 		String sql = this.getSqlInsert();
 		SqlParameterSource params = this.getSqlParameterSource(o);
 

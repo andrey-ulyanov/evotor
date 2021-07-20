@@ -71,22 +71,18 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customerExist = this.customerRepository.readByLogin(customer.getLogin());
 		if (customerExist != null)
 			throw new CustomerAlreadyExistException("Customer is already in database. ");
-
-		customer.setId((long) customer.getLogin().hashCode());
-		customer.setVersion(1);
-		customer.setTimestamp(Calendar.getInstance().getTime());
+		
 		customer.setActiveAfter(Calendar.getInstance().getTime());
 		customer.setActiveUntil(null);
 
 		int inserted = this.customerRepository.insert(customer);
+		
+		System.err.println(customer);
 
 		if (inserted != 1)
 			throw new IllegalStateException("Database error. ");
 
 		CustomerAccount customerAccount = new CustomerAccount();
-		customerAccount.setId((long) customer.getLogin().hashCode());
-		customerAccount.setVersion(1);
-		customerAccount.setTimestamp(Calendar.getInstance().getTime());
 		customerAccount.setCurrency(Currency.RUB);
 		customerAccount.setBalance(0);
 		customerAccount.setCustomer(customer);

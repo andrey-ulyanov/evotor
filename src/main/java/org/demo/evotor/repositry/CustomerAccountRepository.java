@@ -10,7 +10,7 @@ import org.demo.evotor.domain.CustomerAccount;
  * @author Andrey Ulyanov
  *
  */
-public interface CustomerAccountRepository extends IsRepository<CustomerAccount, Integer> {
+public interface CustomerAccountRepository extends IsRepository<CustomerAccount, Long> {
 	
 	/**
 	 * 

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 @Entity(name = CustomerAccount.TABLE)
-public class CustomerAccount implements Serializable, Cloneable {
+public class CustomerAccount implements IsDomain, Serializable, Cloneable {
 
 	private static final long serialVersionUID = 6856048406132837155L;
 
