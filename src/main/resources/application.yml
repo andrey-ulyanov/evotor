@@ -1,0 +1,20 @@
+---
+server:
+    port: 8080
+    tomcat:
+        accept-count: 10
+        accesslog:
+            enabled: true
+            directory: ${java.io.tmpdir}/log/
+            file-date-format: .yyyy-MM-dd
+            prefix: demo-access
+            suffix: .log    
+spring:
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: "jdbc:mysql://localhost:3306/dev?useUnicode=yes&characterEncoding=UTF-8&WEB=1"
+        driver-class-name: "com.mysql.cj.jdbc.Driver"
+        username: "user"
+        password: "********"
+        hikari:
+            idle-timeout: 10000

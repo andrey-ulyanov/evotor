@@ -1,4 +1,4 @@
-package demo.uav.evotor;
+package org.demo.evotor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
