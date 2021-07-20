@@ -1,26 +1,60 @@
 package org.demo.evotor.web.dto;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 
  * @author Andrey Ulyanov
  *
  */
-public class Balance implements Serializable, Extras {
+@JsonSerialize
+public class Balance implements Serializable, IsExtras {
 
 	private static final long serialVersionUID = -7792628281635548282L;
 
+	/* Class */
+
+	public static DecimalFormatSymbols decimalFormatSymbols;
+	public static DecimalFormat decimalFormat;
+
+	static {
+		decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+		decimalFormatSymbols.setCurrencySymbol("");
+		decimalFormatSymbols.setDecimalSeparator('.');
+
+		decimalFormat = (DecimalFormat) DecimalFormat.getInstance();
+		decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
+		decimalFormat.setGroupingUsed(false);
+	}
+
+	public static String formatBalance(int balance, int point) {
+		return decimalFormat.format((double) balance / (Math.pow(10, point)));
+	}
+
+	/* Instance */
+
 	protected String balance;
 
-	public Balance(String balance) {
+	/**
+	 * 
+	 * @param customerAccount
+	 */
+	public Balance(int balance, int point) {
 		super();
-		this.balance = balance;
+		this.balance = formatBalance(balance, point);
 	}
+
+	/* ***** Get & Set ***** */
 
 	public String getBalance() {
 		return balance;
 	}
+
+	/* ***** Override ***** */
 
 	@Override
 	public String toString() {

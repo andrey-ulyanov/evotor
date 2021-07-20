@@ -2,9 +2,6 @@ package org.demo.evotor.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,30 +20,7 @@ public class CustomerAccount implements Serializable, Cloneable {
 	public static final String COLUMN_TIMESTAMP = "TM";
 	public static final String COLUMN_CURRENCY = "CURRENCY";
 	public static final String COLUMN_BALANCE = "BALANCE";
-
-	/**
-	 * 
-	 */
-	public static final BiConsumer<CustomerAccount, Map<String, Object>> MAPPER = (CustomerAccount domain,
-			Map<String, Object> map) -> {
-		map.put(CustomerAccount.COLUMN_ID, domain.id);
-		map.put(CustomerAccount.COLUMN_VERSION, domain.version);
-		map.put(CustomerAccount.COLUMN_TIMESTAMP, domain.timestamp);
-		map.put(CustomerAccount.COLUMN_CURRENCY, domain.currency);
-		map.put(CustomerAccount.COLUMN_BALANCE, domain.balance);
-	};
-
-	/**
-	 * 
-	 */
-	public static final BiConsumer<Map<String, Object>, CustomerAccount> UNMAPPER = (Map<String, Object> map,
-			CustomerAccount domain) -> {
-		domain.id = (Long) map.get(CustomerAccount.COLUMN_ID);
-		domain.version = (Integer) map.get(CustomerAccount.COLUMN_VERSION);
-		domain.timestamp = (Date) map.get(CustomerAccount.COLUMN_TIMESTAMP);
-		domain.currency = (Currency) map.get(CustomerAccount.COLUMN_CURRENCY);
-		domain.balance = (Integer) map.get(CustomerAccount.COLUMN_BALANCE);
-	};
+	public static final String COLUMN_ID_CUSTOMER = "ID_CUSTOMER";
 
 	/* Instance */
 
@@ -66,6 +40,13 @@ public class CustomerAccount implements Serializable, Cloneable {
 
 	@Column(name = COLUMN_TIMESTAMP)
 	protected Integer balance;
+
+	@Column(name = COLUMN_ID_CUSTOMER)
+	protected Long idCustomer;
+
+	/* Relations */
+
+	protected Customer customer;
 
 	/**
 	 * Default
@@ -118,6 +99,26 @@ public class CustomerAccount implements Serializable, Cloneable {
 
 	public CustomerAccount setBalance(Integer balance) {
 		this.balance = balance;
+		return this;
+	}
+
+	public Long getIdCustomer() {
+		return idCustomer;
+	}
+
+	public CustomerAccount setIdCustomer(Long idCustomer) {
+		this.idCustomer = idCustomer;
+		return this;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public CustomerAccount setCustomer(Customer customer) {
+		this.customer = customer;
+		if (customer != null) 
+			this.idCustomer = customer.id;
 		return this;
 	}
 

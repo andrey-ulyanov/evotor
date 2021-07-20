@@ -1,7 +1,9 @@
 package org.demo.evotor.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize
 public enum ClientResultCode {
 
 	OK(0, "OK"), EXIST(1, "User already exist"), ERROR(2, "System error"), NOT_EXIST(3, "User is not exist"),

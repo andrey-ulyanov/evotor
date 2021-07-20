@@ -47,13 +47,18 @@ public class Customer implements Serializable, Cloneable {
 	protected String login;
 
 	@Column(name = COLUMN_PASSWORD)
-	protected String password; 
+	protected String password;
+
+	/* Relations */
+
+	protected transient CustomerAccount customerAccount;
 
 	/**
 	 * Default
 	 */
 	public Customer() {
 		super();
+		this.customerAccount = null;
 	}
 
 	/**
@@ -62,7 +67,7 @@ public class Customer implements Serializable, Cloneable {
 	 * @param another
 	 */
 	public Customer(Customer another) {
-		super();
+		this();
 		this.id = another.id;
 		this.version = another.version;
 		this.timestamp = another.timestamp;
@@ -134,6 +139,15 @@ public class Customer implements Serializable, Cloneable {
 
 	public Customer setPassword(String password) {
 		this.password = password;
+		return this;
+	}
+
+	public CustomerAccount getCustomerAccount() {
+		return customerAccount;
+	}
+
+	public Customer setCustomerAccount(CustomerAccount customerAccount) {
+		this.customerAccount = customerAccount;
 		return this;
 	}
 

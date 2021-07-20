@@ -1,10 +1,10 @@
-package demo.uav.evotor;
+package org.demo.evotor;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EvotorApplicationTests {
+class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {

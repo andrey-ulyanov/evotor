@@ -1,4 +1,4 @@
-package org.demo.evotor.repository;
+package org.demo.evotor.repositry;
 
 import org.demo.evotor.domain.Customer;
 

@@ -2,11 +2,15 @@ package org.demo.evotor.web.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * 
  * @author Andrey Ulyanov
  *
  */
+@JsonSerialize
 public class ClientResult implements Serializable {
 
 	private static final long serialVersionUID = -7646523739717537366L;
@@ -23,7 +27,8 @@ public class ClientResult implements Serializable {
 		return result;
 	}
 
-	public Extras getBalance() {
+	@JsonInclude(JsonInclude.Include.NON_NULL) 
+	public IsExtras getBalance() {
 		return balance;
 	}
 
