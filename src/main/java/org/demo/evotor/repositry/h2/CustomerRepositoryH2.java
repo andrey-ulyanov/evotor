@@ -6,6 +6,7 @@ import org.demo.evotor.config.EvotorConfig;
 import org.demo.evotor.domain.Customer;
 import org.demo.evotor.repositry.AbstractJdbcRepository;
 import org.demo.evotor.repositry.CustomerRepository;
+import org.demo.evotor.repositry.utils.Columns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,18 @@ public class CustomerRepositoryH2 extends AbstractJdbcRepository<Customer, Long>
 	public static final String INSERT = "insert into " + Customer.TABLE + " (" + Customer.COLUMN_ID + ", "
 			+ Customer.COLUMN_VERSION + ", " + Customer.COLUMN_TIMESTAMP + ", " + Customer.COLUMN_ACTIVE_AFTER + ", "
 			+ Customer.COLUMN_ACTIVE_UNTIL + ", " + Customer.COLUMN_LOGIN + ", " + Customer.COLUMN_PASSWORD + ") "
-			+ "values" + " ( :id, :version, :timestamp, :activeAfter, :activeUntil, :login, :password )";
+			+ "values" + " ( :" + Columns.getFieldForColumn(Customer.class, Customer.COLUMN_ID) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_VERSION) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_TIMESTAMP) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_ACTIVE_AFTER) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_ACTIVE_UNTIL) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_LOGIN) + ", :"
+			+ Columns.getFieldForColumn(Customer.class, Customer.COLUMN_PASSWORD) + " )";
 
 	public static final String SELECT = "select * from " + Customer.TABLE;
-	
+
 	public static final String SELECT_BY_LOGIN = "select * from " + Customer.TABLE + " where " + Customer.COLUMN_LOGIN
-			+ " = " + ":login";
+			+ " = " + ":" + Columns.getFieldForColumn(Customer.class, Customer.COLUMN_LOGIN);
 
 	/**
 	 * 
@@ -47,7 +54,7 @@ public class CustomerRepositoryH2 extends AbstractJdbcRepository<Customer, Long>
 	public CustomerRepositoryH2(@Autowired NamedParameterJdbcTemplate jdbcTemplate) {
 		super(jdbcTemplate);
 	}
-	
+
 	/* ***** Implementation ***** */
 
 	@Override
@@ -59,7 +66,7 @@ public class CustomerRepositoryH2 extends AbstractJdbcRepository<Customer, Long>
 	}
 
 	@Override
-	protected SqlParameterSource getSqlParameterSource(Customer domain) {		
+	protected SqlParameterSource getSqlParameterSource(Customer domain) {
 		return new BeanPropertySqlParameterSource(domain);
 	}
 

@@ -77,8 +77,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 		int inserted = this.customerRepository.insert(customer);
 		
-		System.err.println(customer);
-
 		if (inserted != 1)
 			throw new IllegalStateException("Database error. ");
 
@@ -120,6 +118,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (customerLocal.getActiveUntil() != null
 				&& customerLocal.getActiveUntil().before(Calendar.getInstance().getTime()))
 			throw new CustomerNotExistException("Customer not found in database. ");
+		
 		if (customerLocal.getPassword() == null || customer.getPassword() == null
 				|| !customerLocal.getPassword().equals(customer.getPassword()))
 			throw new CustomerUnathorizedException("Customer unathorized. ");		

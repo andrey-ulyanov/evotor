@@ -1,9 +1,8 @@
 package org.demo.evotor.web.dto;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -18,26 +17,22 @@ public class Balance implements Serializable, IsExtras {
 
 	/* Class */
 
-	public static DecimalFormatSymbols decimalFormatSymbols;
-	public static DecimalFormat decimalFormat;
-
-	static {
-		decimalFormatSymbols = DecimalFormatSymbols.getInstance();
-		decimalFormatSymbols.setCurrencySymbol("");
-		decimalFormatSymbols.setDecimalSeparator('.');
-
-		decimalFormat = (DecimalFormat) DecimalFormat.getInstance();
-		decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
-		decimalFormat.setGroupingUsed(false);
-	}
-
-	public static String formatBalance(int balance, int point) {
-		return decimalFormat.format((double) balance / (Math.pow(10, point)));
+	/**
+	 * Make decimal value from minor currency amount.
+	 * 
+	 * @param balance
+	 * @param point
+	 * @return
+	 */
+	public static BigDecimal formatBalance(int balance, int point) {
+		BigDecimal divider = new BigDecimal(Math.pow(10, point));
+		BigDecimal result = new BigDecimal(balance).divide(divider, point, RoundingMode.HALF_UP);
+		return result;
 	}
 
 	/* Instance */
 
-	protected String balance;
+	protected BigDecimal balance;
 
 	/**
 	 * 
@@ -50,7 +45,7 @@ public class Balance implements Serializable, IsExtras {
 
 	/* ***** Get & Set ***** */
 
-	public String getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 

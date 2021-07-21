@@ -8,6 +8,7 @@ import org.demo.evotor.domain.Customer;
 import org.demo.evotor.domain.CustomerAccount;
 import org.demo.evotor.repositry.AbstractJdbcRepository;
 import org.demo.evotor.repositry.CustomerAccountRepository;
+import org.demo.evotor.repositry.utils.Columns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,19 @@ public class CustomerAccountRepositroyH2 extends AbstractJdbcRepository<Customer
 	public static final String INSERT = "insert into " + CustomerAccount.TABLE + " (" + CustomerAccount.COLUMN_ID + ", "
 			+ CustomerAccount.COLUMN_VERSION + ", " + CustomerAccount.COLUMN_TIMESTAMP + ", "
 			+ CustomerAccount.COLUMN_CURRENCY + ", " + CustomerAccount.COLUMN_BALANCE + ", "
-			+ CustomerAccount.COLUMN_ID_CUSTOMER + ") " + "values"
-			+ " ( :id, :version, :timestamp, :currency, :balance, :idCustomer )";
+			+ CustomerAccount.COLUMN_ID_CUSTOMER + ") " + "values" + " ( :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_ID) + ", :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_VERSION) + ", :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_TIMESTAMP) + ", :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_CURRENCY) + ", :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_BALANCE) + ", :"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_ID_CUSTOMER) + " )";
 
 	public static final String SELECT = "select * from " + CustomerAccount.TABLE;
 
 	public static final String SELECT_BY_ID_CUSTOMER = "select * from " + CustomerAccount.TABLE + " where "
-			+ CustomerAccount.COLUMN_ID_CUSTOMER + " = " + ":idCustomer";
+			+ CustomerAccount.COLUMN_ID_CUSTOMER + " = " + ":"
+			+ Columns.getFieldForColumn(CustomerAccount.class, CustomerAccount.COLUMN_ID_CUSTOMER);
 
 	/**
 	 * 

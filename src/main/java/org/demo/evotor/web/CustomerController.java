@@ -1,7 +1,6 @@
 package org.demo.evotor.web;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import javax.validation.Valid;
 
 import org.demo.evotor.domain.Customer;
 import org.demo.evotor.domain.CustomerAccount;
@@ -11,11 +10,13 @@ import org.demo.evotor.exception.CustomerUnathorizedException;
 import org.demo.evotor.service.CustomerService;
 import org.demo.evotor.web.dto.Balance;
 import org.demo.evotor.web.dto.ClientCommand;
+import org.demo.evotor.web.dto.ClientCommandType;
 import org.demo.evotor.web.dto.ClientResult;
 import org.demo.evotor.web.dto.ClientResultCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,30 +24,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 
+ * @author Andrey Ulyanov
+ *
+ */
 @RestController
-@RequestMapping(path = "/customer")
+@RequestMapping(path = CustomerController.PATH)
 public class CustomerController {
 
 	private final static Logger LOG = LoggerFactory.getLogger(CustomerController.class);
 
 	/* Class */
 
-	public static DecimalFormatSymbols decimalFormatSymbols;
-	public static DecimalFormat decimalFormat;
-
-	static {
-		decimalFormatSymbols = DecimalFormatSymbols.getInstance();
-		decimalFormatSymbols.setCurrencySymbol("");
-		decimalFormatSymbols.setDecimalSeparator('.');
-
-		decimalFormat = (DecimalFormat) DecimalFormat.getInstance();
-		decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
-		decimalFormat.setGroupingUsed(false);
-	}
-
-	public static String formatBalance(int balance, int point) {
-		return decimalFormat.format((double) balance / (Math.pow(10, point)));
-	}
+	public static final String PATH = "/customer";
+	public static final String PATH_SERVICE1 = "";
+	public static final String PATH_SERVICE2 = "/";
+	public static final String PATH_CREATE = "/create";
+	public static final String PATH_BALANCE = "/balance";
 
 	/* Instance */
 
@@ -63,20 +58,26 @@ public class CustomerController {
 
 	/* ***** Implementation ***** */
 
-	@PostMapping(path = "/create")
+	/**
+	 * 
+	 * @param clientCommand
+	 * @return
+	 */
+	@PostMapping(path = PATH_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ClientResult doCreate(@RequestBody ClientCommand clientCommand) {
-		LOG.debug(">> doCreate(Customer customer = {})", clientCommand);
+	public ClientResult doCreate(@Valid @RequestBody ClientCommand clientCommand) {
+		LOG.debug(">> doCreate(ClientCommand clientCommand = {})", clientCommand);
 
 		ClientResult result;
 
 		try {
-			if (!"create".equals(clientCommand.getType()))
+			if (!ClientCommandType.CREATE.equals(clientCommand.getType()))
 				throw new IllegalArgumentException("Type [" + clientCommand.getType() + "] is not allowed. ");
 
 			Customer customer = new Customer().setLogin(clientCommand.getLogin())
-					.setPassword(clientCommand.getPassword());
+					.setPasswordClear(clientCommand.getPassword());
 			customer = this.customerService.addCustomer(customer);
+
 			result = new ClientResult(ClientResultCode.OK);
 		} catch (CustomerAlreadyExistException e) {
 			LOG.warn("Fail to create new customer. Customer already exist. ", e);
@@ -90,25 +91,31 @@ public class CustomerController {
 			result = new ClientResult(ClientResultCode.ERROR);
 		}
 
-		LOG.debug("<< ClientResult doCreate(): {}", result);
+		LOG.debug("<< doCreate(): {}", result);
 		return result;
 	}
 
-	@GetMapping(path = "/balance")
+	/**
+	 * 
+	 * @param clientCommand
+	 * @return
+	 */
+	@GetMapping(path = PATH_BALANCE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ClientResult getBalance(@RequestBody ClientCommand clientCommand) {
-		LOG.debug(">> ClientResult getBalance(Customer customer = {})", clientCommand);
+	public ClientResult getBalance(@Valid @RequestBody ClientCommand clientCommand) {
+		LOG.debug(">> getBalance(ClientCommand clientCommand = {})", clientCommand);
 
-		ClientResult result = null;
+		ClientResult result;
 
 		try {
-			if (!"get-balance".equals(clientCommand.getType()))
+			if (!ClientCommandType.GET_BALANCE.equals(clientCommand.getType()))
 				throw new IllegalArgumentException("Type [" + clientCommand.getType() + "] is not allowed. ");
-			
+
 			Customer customer = new Customer().setLogin(clientCommand.getLogin())
-					.setPassword(clientCommand.getPassword());
+					.setPasswordClear(clientCommand.getPassword());
 			CustomerAccount customerAccount = this.customerService.getCustomerAccounts(customer);
 			Balance balance = new Balance(customerAccount.getBalance(), customerAccount.getCurrency().getPoint());
+
 			result = new ClientResult(ClientResultCode.OK).setBalance(balance);
 		} catch (CustomerUnathorizedException e) {
 			LOG.warn("Unathorized balance request. ", e);
@@ -125,9 +132,42 @@ public class CustomerController {
 			result = new ClientResult(ClientResultCode.ERROR);
 		}
 
-		// TODO
+		LOG.debug("<< getBalance(ClientCommand clientCommand): {}", result);
+		return result;
+	}
 
-		LOG.debug("<< ClientResult getBalance(): {}", result);
+	/**
+	 * 
+	 * @param clientCommand
+	 * @return
+	 */
+	@PostMapping(path = { PATH_SERVICE1,
+			PATH_SERVICE2 }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ClientResult service(@Valid @RequestBody ClientCommand clientCommand) {
+		LOG.debug(">> service(ClientCommand clientCommand = {})", clientCommand);
+
+		ClientResult result;
+
+		try {
+			switch (clientCommand.getType()) {
+			case CREATE:
+				result = this.doCreate(clientCommand);
+				break;
+			case GET_BALANCE:
+				result = this.getBalance(clientCommand);
+				break;
+			default:
+				result = new ClientResult(ClientResultCode.ERROR);
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error("Unexpected error while service. ", e);
+			result = new ClientResult(ClientResultCode.ERROR);
+		}
+
+		LOG.debug("<< service(): {}", result);
 		return result;
 	}
 

@@ -8,14 +8,17 @@ server:
             directory: ${java.io.tmpdir}/log/
             file-date-format: .yyyy-MM-dd
             prefix: demo-access
-            suffix: .log    
+            suffix: .log   
+management:
+    endpoint:
+        health.enabled: true
 spring:
     datasource:
         initialization-mode: "always"
-        # platform: "mysql"
+        #platform: "mysql"
         platform: "h2"
         type: com.zaxxer.hikari.HikariDataSource
-        # url: "jdbc:mysql://localhost:3306/evo?useUnicode=yes&characterEncoding=UTF-8&WEB=1"
+        #url: "jdbc:mysql://localhost:3306/evotor?useUnicode=yes&characterEncoding=UTF-8&WEB=1"
         url: jdbc:h2:mem:demo
         # driver-class-name: "com.mysql.cj.jdbc.Driver"
         driver-class-name: "org.h2.Driver"

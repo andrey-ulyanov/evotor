@@ -3,6 +3,7 @@ package org.demo.evotor.web.dto;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -26,9 +27,10 @@ public class ClientResult implements Serializable {
 	public ClientResultCode getResult() {
 		return result;
 	}
-
+	
+	@JsonProperty("extras")
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
-	public IsExtras getBalance() {
+	public Balance getBalance() {
 		return balance;
 	}
 

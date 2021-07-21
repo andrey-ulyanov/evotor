@@ -35,10 +35,10 @@ public class CustomerAccount implements IsDomain, Serializable, Cloneable {
 	@Column(name = COLUMN_TIMESTAMP)
 	protected Date timestamp;
 
-	@Column(name = COLUMN_TIMESTAMP)
+	@Column(name = COLUMN_CURRENCY)
 	protected Currency currency;
 
-	@Column(name = COLUMN_TIMESTAMP)
+	@Column(name = COLUMN_BALANCE)
 	protected Integer balance;
 
 	@Column(name = COLUMN_ID_CUSTOMER)

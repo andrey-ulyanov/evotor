@@ -10,9 +10,9 @@
 		</encoder>
 	</appender>
 
-	<logger name="org.demo" level="DEBUG" />
+	<logger name="org.demo" level="ERROR" />
 
-	<root level="INFO">
+	<root level="ERROR">
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

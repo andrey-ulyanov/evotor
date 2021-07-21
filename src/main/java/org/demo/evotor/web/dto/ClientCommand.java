@@ -2,6 +2,9 @@ package org.demo.evotor.web.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -16,8 +19,14 @@ public class ClientCommand implements Serializable {
 
 	/* Instance */
 
-	protected String type;
+	protected ClientCommandType type;
+	
+	@NotBlank
+	@Size(max = 255 )	
 	protected String login;
+	
+	@NotBlank
+	@Size(max = 255)
 	protected String password;
 
 	/**
@@ -33,7 +42,7 @@ public class ClientCommand implements Serializable {
 	 * @param login
 	 * @param password
 	 */
-	public ClientCommand(String type, String login, String password) {
+	public ClientCommand(ClientCommandType type, String login, String password) {
 		super();
 		this.type = type;
 		this.login = login;
@@ -42,11 +51,11 @@ public class ClientCommand implements Serializable {
 
 	/* ***** Get & Set ***** */
 
-	public String getType() {
+	public ClientCommandType getType() {
 		return type;
 	}
 
-	public ClientCommand setType(String type) {
+	public ClientCommand setType(ClientCommandType type) {
 		this.type = type;
 		return this;
 	}

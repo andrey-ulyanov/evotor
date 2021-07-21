@@ -1,6 +1,7 @@
 package org.demo.evotor.domain;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -75,6 +76,18 @@ public class Customer implements IsDomain, Serializable, Cloneable {
 		this.activeUntil = another.activeUntil;
 		this.login = another.login;
 		this.password = another.password;
+	}
+
+	/* ***** Implementation ***** */
+
+	public boolean isPasswordValid(String passwordClear) throws NoSuchAlgorithmException {
+		return (this.password != null && passwordClear != null) ? this.password.equals(formatPassword(passwordClear))
+				: false;
+	}
+	
+	public Customer setPasswordClear(String password) throws NoSuchAlgorithmException {
+		this.password = formatPassword(password);
+		return this;
 	}
 
 	/* ***** Get & Set ***** */
