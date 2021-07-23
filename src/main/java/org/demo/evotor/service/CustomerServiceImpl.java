@@ -75,7 +75,15 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setActiveAfter(Calendar.getInstance().getTime());
 		customer.setActiveUntil(null);
 
-		int inserted = this.customerRepository.insert(customer);
+		
+		int inserted = 0;
+		
+		try {
+			inserted = this.customerRepository.insert(customer);
+		} catch (DuplicateKeyException e) {
+			LOG.warn("Duplicate data. ", e);
+			throw new CustomerAlreadyExistException("Customer is already in database. ");
+		}
 		
 		if (inserted != 1)
 			throw new IllegalStateException("Database error. ");
